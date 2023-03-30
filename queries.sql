@@ -165,7 +165,7 @@ WHERE owners.full_name = 'Jennifer Orwell' AND species.name = 'Digimon';
     SELECT animals.name
 FROM animals
 JOIN owners ON animals.owner_id = owners.id
-WHERE owners.full_name = 'Dean Winchester' AND animals.tried_to_escape = 0;
+WHERE owners.full_name = 'Dean Winchester' AND animals.escape_attempts = 0;
 
 
 
