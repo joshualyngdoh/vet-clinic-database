@@ -1,5 +1,6 @@
 /* Database schema to keep the structure of entire database. */
 
+-- Insert table for animals
 
 CREATE TABLE animals (
   id INTEGER,
@@ -12,10 +13,14 @@ CREATE TABLE animals (
 
 ALTER TABLE animals ADD COLUMN species VARCHAR(255);
 
+-- Insert table for species
+
 CREATE TABLE species (
   id INTEGER PRIMARY KEY ,
   name TEXT
 );
+
+-- Insert table for owners
 
 CREATE TABLE owners (
   id INTEGER PRIMARY KEY,
