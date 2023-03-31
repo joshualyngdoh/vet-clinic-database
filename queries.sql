@@ -177,6 +177,15 @@ GROUP BY owners.full_name
 ORDER BY count DESC
 LIMIT 1;
 
+-- Who was the last animal seen by William Tatcher?
+SELECT animals.name
+FROM animals
+JOIN visits ON animals.id = visits.animal_id
+JOIN vets ON visits.vet_id = vets.id
+WHERE vets.name = 'William Tatcher'
+ORDER BY visits.visit_date DESC
+LIMIT 1;
+
 -- List all vets and their specialties, including vets with no specialties.
 SELECT * FROM vets
 LEFT JOIN specializations
@@ -186,11 +195,11 @@ ON species.id = specializations.species_id;
 
 
 -- How many different animals did Stephanie Mendez see?
-SELECT a.name AS "Animal", v.name AS "Vet", visits.visit_date AS "Visit Date"
-FROM visits
-JOIN animals a ON visits.animal_id = a.id
-JOIN vets v ON visits.vet_id = v.id
-WHERE visits.visit_date = (SELECT MAX(visit_date) FROM visits)
+SELECT COUNT(DISTINCT animals.name)
+FROM animals
+JOIN visits ON animals.id = visits.animal_id
+JOIN vets ON visits.vet_id = vets.id
+WHERE vets.name = 'Stephanie Mendez';
 
 -- List all animals that visited Stephanie Mendez between April 1st and August 30th, 2020.
 SELECT a.name
@@ -221,8 +230,7 @@ SELECT vets.name AS "Vet", animals.name AS "Animal", visits.visit_date
   ORDER BY visit_date LIMIT 1;
 
 -- Details for most recent visit: animal information, vet information, and date of visit.
-SELECT
-  vets.id AS "Vet-id", vets.name AS "Vet", date_of_graduation,
+SELECT vets.id AS "Vet-id", vets.name AS "Vet", date_of_graduation,
 
   visits.visit_date,
 
@@ -237,15 +245,14 @@ SELECT
 
 -- How many visits were with a vet that did not specialize in that animal's species?
 
-
-SELECT vets.name
-  FROM vets
-  JOIN visits
-    ON vets.id = visits.vet_id
-  LEFT JOIN specializations
-    ON vets.id = specializations.vet_id
-  WHERE specializations.vet_id IS NULL
-  GROUP BY vets.name;
+SELECT COUNT(visit_date)
+FROM visits
+JOIN animals ON animals.id = visits.animal_id
+WHERE vet_id NOT IN (
+  SELECT vet_id
+  FROM specializations
+  WHERE species_id = animals.species_id
+);
 
 
 -- specialty should Maisy Smith consider getting
